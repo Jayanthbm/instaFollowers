@@ -4,6 +4,20 @@ const puppeteer = require('puppeteer');
 const { JSDOM } = require("jsdom");
 import chalk from 'chalk';
 import ora from 'ora';
+
+const profiles = [
+  'https://www.instagram.com/jayanthbharadwaj/',
+  'https://www.instagram.com/virat.kohli/',
+  'https://www.instagram.com/gaddigeshgaddu7/',
+  'https://www.instagram.com/monika_bg_smg/',
+  'https://www.instagram.com/_.archana/',
+  'https://www.instagram.com/anuragandikote/',
+  'https://www.instagram.com/kish.12/',
+  'https://www.instagram.com/_s_u_r_a_j_p_u_j_a_r_/',
+  'https://www.instagram.com/sapthami_gowda/',
+  'https://www.instagram.com/govindjamkhandi/',
+  'https://www.instagram.com/fairoz__faizu/'
+];
 (async () => {
   var result = [];
   let browser;
@@ -12,35 +26,35 @@ import ora from 'ora';
     args: ["--disable-setuid-sandbox"],
     'ignoreHTTPSErrors': true
   });
-  const url = [
-    'https://www.instagram.com/jayanthbharadwaj/',
-    'https://www.instagram.com/virat.kohli/',
-    'https://www.instagram.com/gaddigeshgaddu7/',
-    'https://www.instagram.com/monika_bg_smg/',
-    'https://www.instagram.com/_.archana/',
-    'https://www.instagram.com/anuragandikote/',
-    'https://www.instagram.com/kish.12/',
-    'https://www.instagram.com/_s_u_r_a_j_p_u_j_a_r_/',
-    'https://www.instagram.com/sapthami_gowda/',
-    'https://www.instagram.com/govindjamkhandi/',
-    'https://www.instagram.com/fairoz__faizu/'
-  ];
+  const page = await browser.newPage();
   const spinner = ora().start();
   const spinner2 = ora('Loading').start();
+  //TODO Check for logged in or not
   spinner.info('Logging into Instagram..')
-  let page = await browser.newPage();
   await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle2' });
+  // Wait for log in form
+  await Promise.all([
+    page.waitForSelector('[name="username"]'),
+    page.waitForSelector('[name="password"]'),
+    page.waitForSelector('[name="submit"]'),
+  ]);
+
+  // Enter username and password
+
   await page.type('input[name=username]', '7019883952');
   await page.type('input[name=password]', 'jbot@123');
+
   await page.click("button[type=submit]");
+
   try {
     await page.waitForNavigation({ timeout: '10000' });
-    spinner.succeed('Login Successful')
+    spinner.succeed('Login Successful');
+    //TODO Save login session
   } catch (error) {
     spinner.warn("Error During Login, Trying to fetch followers without login");
   }
-  for (let i = 0; i < url.length; i++) {
-    await page.goto(url[i], { waitUntil: 'networkidle2' });
+  for (let i = 0; i < profiles.length; i++) {
+    await page.goto(profiles[i], { waitUntil: 'networkidle2' });
     var html = await page.content();
     var { document } = new JSDOM(html).window;
     try {
@@ -59,7 +73,7 @@ import ora from 'ora';
       });
       spinner.succeed(`Fetched ${name}`);
     } catch (error) {
-      spinner.fail(url[i])
+      spinner.fail(profiles[i])
     }
   }
   browser.close();
