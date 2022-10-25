@@ -1,0 +1,23 @@
+{
+  "name": "instafollowers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Jayanthbharadwaj M",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "chalk": "^5.1.2",
+    "jsdom": "^20.0.1",
+    "ora": "^6.1.2",
+    "puppeteer": "^19.1.0"
+  }
+}
