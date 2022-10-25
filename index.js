@@ -27,29 +27,14 @@ const profiles = [
     'ignoreHTTPSErrors': true
   });
   const page = await browser.newPage();
-  const spinner = ora().start();
-  const spinner2 = ora('Loading').start();
-  //TODO Check for logged in or not
-  spinner.info('Logging into Instagram..')
+  
   await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle2' });
-  // Wait for log in form
-  await Promise.all([
-    page.waitForSelector('[name="username"]'),
-    page.waitForSelector('[name="password"]'),
-    page.waitForSelector('[name="submit"]'),
-  ]);
-
-  // Enter username and password
-
   await page.type('input[name=username]', '7019883952');
   await page.type('input[name=password]', 'jbot@123');
-
   await page.click("button[type=submit]");
-
   try {
     await page.waitForNavigation({ timeout: '10000' });
-    spinner.succeed('Login Successful');
-    //TODO Save login session
+    spinner.succeed('Login Successful')
   } catch (error) {
     spinner.warn("Error During Login, Trying to fetch followers without login");
   }
