@@ -73,6 +73,7 @@ const PASSWORD = 'jbot@123';
   }
   browser.close();
   if (result?.length > 0) {
+    console.log('\n \t \t' + chalk.bgHex('#8a3ab9')('Followers count'))
     result.sort((a, b) => b.followers1 - a.followers1);
     for (let i = 0; i < result.length; i++) {
       let name = result[i].name;
@@ -81,7 +82,7 @@ const PASSWORD = 'jbot@123';
         followers = result[i].followers2;
       }
       let following = result[i].following;
-      console.log(chalk.blue.bgRed.bold(i + 1) + ' ' + chalk.blue(name) + chalk.magenta(' --> ') + chalk.hex('#DEADED').bold(followers))
+      console.log(chalk.hex('#e95950')(i + 1) + '.' + chalk.blue(name) + chalk.hex('#fbad50')(' --> ') + chalk.hex('#bc2a8d').bold(followers))
     }
   } else {
     spinner.fail('Fetching Failed');
