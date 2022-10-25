@@ -18,6 +18,9 @@ const profiles = [
   'https://www.instagram.com/govindjamkhandi/',
   'https://www.instagram.com/fairoz__faizu/'
 ];
+
+const USER_NAME = '7019883952';
+const PASSWORD = 'jbot@123';
 (async () => {
   var result = [];
   let browser;
@@ -26,11 +29,18 @@ const profiles = [
     args: ["--disable-setuid-sandbox"],
     'ignoreHTTPSErrors': true
   });
-  const page = await browser.newPage();
-  
+
+  let page = await browser.newPage();
+
+  //Ora Intialiation
+  const spinner = ora().start();
+  const loading = ora('Loading').start();
+
+  //TODO Check for Login
+  spinner.info('Logging into Instagram..')
   await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle2' });
-  await page.type('input[name=username]', '7019883952');
-  await page.type('input[name=password]', 'jbot@123');
+  await page.type('input[name=username]', USER_NAME);
+  await page.type('input[name=password]', PASSWORD);
   await page.click("button[type=submit]");
   try {
     await page.waitForNavigation({ timeout: '10000' });
@@ -72,10 +82,10 @@ const profiles = [
       }
       let following = result[i].following;
       console.log(chalk.blue.bgRed.bold(i + 1) + ' ' + chalk.blue(name) + chalk.magenta(' --> ') + chalk.hex('#DEADED').bold(followers))
-  }
+    }
   } else {
     spinner.fail('Fetching Failed');
   }
   spinner.stop()
-  spinner2.stop()
+  loading.stop()
 })();
